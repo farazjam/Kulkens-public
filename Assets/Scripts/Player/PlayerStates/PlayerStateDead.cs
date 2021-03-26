@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -10,11 +9,13 @@ public class PlayerStateDead : PlayerState
     readonly SignalBus _signalBus;
     readonly Settings _settings;
     readonly PlayerFacade _player;
-    public PlayerStateDead(Settings settings, PlayerFacade player, SignalBus signalBus)
+    MenuSettings _menuSettings;
+    public PlayerStateDead(Settings settings, PlayerFacade player, SignalBus signalBus, MenuSettings menuSettings)
     {
         _settings = settings;
         _player = player;
         _signalBus = signalBus;
+        _menuSettings = menuSettings;
     }
 
     #endregion
@@ -40,9 +41,9 @@ public class PlayerStateDead : PlayerState
     }
     void RestartGame()
     {
-        PublicStaticSettings.CurrentLevel = 0;
+        _menuSettings.SetCurrentLevel = 0;
         LoadSceneMode loadMode = LoadSceneMode.Single;
-        SceneManager.LoadScene(PublicStaticSettings.CurrentLevel, loadMode);
+        SceneManager.LoadScene(_menuSettings.GetCurrentLevel, loadMode);
     }
     public override void Dispose()
     {

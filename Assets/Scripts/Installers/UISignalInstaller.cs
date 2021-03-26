@@ -1,6 +1,4 @@
 using Zenject;
-using ModestTree;
-using System;
 
 public class UISignalInstaller : MonoInstaller<UISignalInstaller>
 {

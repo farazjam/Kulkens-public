@@ -1,8 +1,6 @@
-using System;
-using UnityEngine;
 using Zenject;
 
-public class GameInstaller : MonoInstaller
+public class GameInstaller : MonoInstaller <GameInstaller>
 {
     public override void InstallBindings()
     {
@@ -17,6 +15,7 @@ public class GameInstaller : MonoInstaller
 
         Container.Bind<TileFactory>().AsSingle();
         Container.BindFactory<TilePointMoving, TilePointMoving.Factory>().WhenInjectedInto<TileFactory>();
+
 
     }
 

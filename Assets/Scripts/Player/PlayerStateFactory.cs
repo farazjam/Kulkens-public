@@ -1,5 +1,4 @@
-﻿using Zenject;
-public enum PlayerStates
+﻿public enum PlayerStates
 {
     Alive,
     Dead,

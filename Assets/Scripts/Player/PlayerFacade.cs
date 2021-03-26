@@ -17,13 +17,15 @@ public class PlayerFacade : MonoBehaviour
     SignalBus _signalBus;
     PlayerStateFactory _stateFactory;
     Settings _settings;
+    MenuSettings _menuSettings;
 
     [Inject]
-    public void Construct(PlayerStateFactory stateFactory, Settings settings, SignalBus signalBus)
+    public void Construct(PlayerStateFactory stateFactory, Settings settings, SignalBus signalBus, MenuSettings menuSettings)
     {
         _stateFactory = stateFactory;
         _settings = settings;
         _signalBus = signalBus;
+        _menuSettings = menuSettings;
     }
 
     #endregion
@@ -53,15 +55,15 @@ public class PlayerFacade : MonoBehaviour
     }
     public Transform GetRespawnTransform { get => _respawnPos; }
     public GameDifficulty SetDifficulty { set { _difficulty = value; ChangeDifficulty(); } }
-    public int GetCurLives { get {  return PublicStaticSettings.CurrentLives; } }
-    public int SetCurLives { set { PublicStaticSettings.CurrentLives = value; } }
+    public int GetCurLives { get {  return _menuSettings.GetCurrentLives; } }
+    public int SetCurLives { set { _menuSettings.SetCurrentLives = value; } }
     public bool RunOutOfLives { get => runOutOfLives; set { runOutOfLives = value; }  }
 
     //game logic
     public void Start()
     {
         runOutOfLives = false;
-        _difficulty = PublicStaticSettings.GameDifficulty;
+        _difficulty = _menuSettings.GetCurrentDifficulty;
         ChangeDifficulty();
         ChangeState(PlayerStates.WaitingForSpawn);
         _signalBus.Fire(new UpdateUILivesSignal($"Lives : {GetCurLives}"));
@@ -80,7 +82,7 @@ public class PlayerFacade : MonoBehaviour
                 _lives = _settings.MaxLivesOnHard;
                 break;
         }
-        PublicStaticSettings.CurrentLives = _lives;
+        _menuSettings.SetCurrentLives = _lives;
     }
     public void Update()
     {

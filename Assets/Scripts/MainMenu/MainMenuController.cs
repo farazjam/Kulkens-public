@@ -2,19 +2,33 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 #pragma warning disable 649
 
 public class MainMenuController : MonoBehaviour
 {
+    #region Constructor
+    MenuSettings _menuSettings;
+
+    [Inject]
+    public void Construct(MenuSettings menuSettings)
+    {
+        _menuSettings = menuSettings;
+    }
+    #endregion
+
+    #region GameLogic
+
     [SerializeField] Text difficultyText;
     GameDifficulty _selectedDifficulty;
     int _difficultyIndex;
     private void Start()
     {
         _difficultyIndex = (int)_selectedDifficulty;
+        Debug.Log(_menuSettings.GetCurrentDifficulty);
         ChangeDifficulty();
-        PublicStaticSettings.CurrentLevel = 0;
+        _menuSettings.SetCurrentLevel = 0;
     }
     private void Update()
     {
@@ -33,9 +47,9 @@ public class MainMenuController : MonoBehaviour
     }
     public void LoadNextScene()
     {
-        PublicStaticSettings.CurrentLevel++;
+        _menuSettings.SetCurrentLevel=_menuSettings.GetCurrentLevel+1;
         LoadSceneMode loadMode = LoadSceneMode.Single;
-        SceneManager.LoadScene(PublicStaticSettings.CurrentLevel, loadMode);
+        SceneManager.LoadScene(_menuSettings.GetCurrentLevel, loadMode);
     }
     public void ChangeDifficulty()
     {
@@ -55,12 +69,13 @@ public class MainMenuController : MonoBehaviour
                 difficultyText.text = "Difficulty : Hard";
                 break;
         }
-        PublicStaticSettings.GameDifficulty = _selectedDifficulty;
+        _menuSettings.SetCurrentDifficulty = _selectedDifficulty;
     }
     public void Dispose()
     {
         Destroy(gameObject);
     }
 
+    #endregion
 
 }

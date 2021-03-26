@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -9,10 +8,12 @@ public class PlayerStateWonGame : PlayerState
     #region Constructor
     readonly Settings _settings;
     readonly PlayerFacade _player;
-    public PlayerStateWonGame(Settings settings, PlayerFacade player)
+    MenuSettings _menuSettings;
+    public PlayerStateWonGame(Settings settings, PlayerFacade player, MenuSettings menuSettings)
     {
         _settings = settings;
         _player = player;
+        _menuSettings = menuSettings;
     }
     #endregion
 
@@ -27,19 +28,19 @@ public class PlayerStateWonGame : PlayerState
 
     void LoadNextLevel()
     {
-        PublicStaticSettings.CurrentLevel++;
-        if (PublicStaticSettings.CurrentLevel > _settings.maxLevels)
+        _menuSettings.SetCurrentLevel = _menuSettings.GetCurrentLevel + 1 ;
+        if (_menuSettings.GetCurrentLevel > _settings.maxLevels)
         {
             //reset counter, load main menu
-            PublicStaticSettings.CurrentLevel = 0;
+            _menuSettings.SetCurrentLevel = 0;
             LoadSceneMode loadMode = LoadSceneMode.Single;
-            SceneManager.LoadScene(PublicStaticSettings.CurrentLevel, loadMode);
+            SceneManager.LoadScene(_menuSettings.GetCurrentLevel, loadMode);
         }
         else
         {
             //load next scene
             LoadSceneMode loadMode = LoadSceneMode.Single;
-            SceneManager.LoadScene(PublicStaticSettings.CurrentLevel, loadMode);
+            SceneManager.LoadScene(_menuSettings.GetCurrentLevel, loadMode);
         }
     }
 
