@@ -54,7 +54,8 @@ public class MainMenuController : MonoBehaviour
     public void ChangeDifficulty()
     {
         _difficultyIndex++;
-        if (_difficultyIndex >= Enum.GetNames(typeof(GameDifficulty)).Length)
+
+        if (IsDifficultyIndexTooBig(_difficultyIndex))
             _difficultyIndex = 0;
         _selectedDifficulty = (GameDifficulty)_difficultyIndex;
         switch (_selectedDifficulty)
@@ -70,6 +71,10 @@ public class MainMenuController : MonoBehaviour
                 break;
         }
         _menuSettings.SetCurrentDifficulty = _selectedDifficulty;
+    }
+    bool IsDifficultyIndexTooBig(int index)
+    {
+        return index >= Enum.GetNames(typeof(GameDifficulty)).Length ? true : false;
     }
     public void Dispose()
     {
